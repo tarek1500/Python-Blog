@@ -1,0 +1,32 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+	<h1><a href="word/create">Create Word</a></h1>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Word</th>
+				<th>Created at</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for word in words %}
+				<tr>
+					<td>{{ word.id }}</td>
+					<td>{{ word.name }}</td>
+					<td>{{ word.created_at }}</td>
+					<td>
+						<div class="btn-group">
+							<a class="btn btn-primary" href="word/show/{{ word.id }}">Show</a>
+							<a class="btn btn-success" href="word/edit/{{ word.id }}">Edit</a>
+							<a class="btn btn-danger" href="word/delete/{{ word.id }}">Delete</a>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

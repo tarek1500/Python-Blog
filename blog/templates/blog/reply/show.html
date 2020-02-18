@@ -1,0 +1,12 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+	<h1><a href="/blog/reply">Go back</a></h1>
+
+	<h2>ID: {{ reply.id }}</h2>
+	<h2>Name: {{ reply.content }}</h2>
+	<h2>Comment: {{ reply.comment }}</h2>
+	<h2>User: {{ reply.user }}</h2>
+	<h2>Created at: {{ reply.created_at }}</h2>
+	<h2>Updated at: {{ reply.updated_at }}</h2>
+{% endblock %}

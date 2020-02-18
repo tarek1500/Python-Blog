@@ -1,0 +1,10 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+	<h1><a href="/blog/word">Go back</a></h1>
+
+	<h2>ID: {{ word.id }}</h2>
+	<h2>Name: {{ word.name }}</h2>
+	<h2>Created at: {{ word.created_at }}</h2>
+	<h2>Updated at: {{ word.updated_at }}</h2>
+{% endblock %}

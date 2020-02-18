@@ -1,0 +1,36 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+	<h1><a href="reply/create">Create Reply</a></h1>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Content</th>
+				<th>Comment</th>
+				<th>User</th>
+				<th>Created at</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for reply in replies %}
+				<tr>
+					<td>{{ reply.id }}</td>
+					<td>{{ reply.content }}</td>
+					<td>{{ reply.comment }}</td>
+					<td>{{ reply.user }}</td>
+					<td>{{ reply.created_at }}</td>
+					<td>
+						<div class="btn-group">
+							<a class="btn btn-primary" href="reply/show/{{ reply.id }}">Show</a>
+							<a class="btn btn-success" href="reply/edit/{{ reply.id }}">Edit</a>
+							<a class="btn btn-danger" href="reply/delete/{{ reply.id }}">Delete</a>
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
