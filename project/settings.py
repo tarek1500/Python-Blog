@@ -34,8 +34,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'blog',
-    'blogg',
     'users',
+    'profanity',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -131,3 +131,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'blog-home'
 LOGIN_URL = 'login'
+STATIC_URL = os.path.join(BASE_DIR,'blog/static/')
+
