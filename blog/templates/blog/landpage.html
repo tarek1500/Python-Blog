@@ -46,11 +46,30 @@
             <p class='text-muted'>
               <ul class="list-group">
                 {% for cat in category %}
-                <li class="list-group-item list-group-item-light"><a href='view/{{cat.id}}'>{{cat.categoryName}}</a><button class="btn btn-danger text-white ml-sm-5 ">Subscribe</button></li>
-                {% endfor%}
+                <li class="list-group-item list-group-item-light">
+                  <a href='view/{{cat.id}}'>{{cat.categoryName}}</a>
+                  <button class="btn btn-danger text-white ml-sm-5 ">Subscribe</button>
+                </li>
+                {% endfor %}
               </ul>
             </p>
           </div>
+          {% for post in post %}
+          <div class="container media">
+             <a href="showpost/{{post.id}}"> <img src="{{post.post_image.url}}"  class="mr-3" height="200px" width="300px"> </a>
+              <div class="media-body">
+                  <h3>{{post.title}}</h3>
+                  <blockquote>{{post.snippet}}</blockquote>
+                  {% for tag in post.tags.all %}
+                  <p>{{tag}}</p>
+                  {% endfor %}
+                  <div>
+                  <span>{{post.created_on}}</span>
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+      
         </div>
       </div>
      </section>

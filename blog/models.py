@@ -27,24 +27,28 @@ class Post(models.Model):
     #  slug = models.SlugField(max_length=200, unique=True)
     def __str__(self):
 	    return self.title
+    
+    def snippet(self):
+        return self.body[:200]+"....."
 
 
 class Comments(models.Model):
     user_id=models.ForeignKey(User,on_delete= models.CASCADE)
     post_id=models.ForeignKey(Post,on_delete= models.CASCADE)
     content=models.TextField()
+    reply=models.ForeignKey('Comments',null=True,related_name='replies',on_delete= models.CASCADE)
     commentTime= models.DateTimeField(auto_now_add=True) 
     updated_on = models.DateTimeField(auto_now= True) 
     def __str__(self):
-	    return self.commentId
+	    return self.content
 
 
-class Reply(models.Model):
-    comment_id=models.ForeignKey(Comments,on_delete=models.CASCADE)
-    userId= models.ForeignKey(User,on_delete= models.CASCADE)
-    replyBody=models.TextField()
-    replyTime= models.DateTimeField(auto_now_add=True) 
-    updated_on = models.DateTimeField(auto_now= True) 
+# class Reply(models.Model):
+#     comment_id=models.ForeignKey(Comments,on_delete=models.CASCADE)
+#     userId= models.ForeignKey(User,on_delete= models.CASCADE)
+#     replyBody=models.TextField()
+#     replyTime= models.DateTimeField(auto_now_add=True) 
+#     updated_on = models.DateTimeField(auto_now= True) 
 
 
 
