@@ -22,6 +22,7 @@ class Post(models.Model):
     created_on = models.DateTimeField(auto_now_add=True) 
     tags = models.ManyToManyField(Tags)
     author = models.ForeignKey(User, on_delete= models.CASCADE)
+    likes=models.ManyToManyField(User,related_name='likes',blank=True)
     category_name = models.ForeignKey(Category,on_delete= models.CASCADE) 
     updated_on = models.DateTimeField(auto_now= True)       
     #  slug = models.SlugField(max_length=200, unique=True)
@@ -43,19 +44,10 @@ class Comments(models.Model):
 	    return self.content
 
 
-# class Reply(models.Model):
-#     comment_id=models.ForeignKey(Comments,on_delete=models.CASCADE)
-#     userId= models.ForeignKey(User,on_delete= models.CASCADE)
-#     replyBody=models.TextField()
-#     replyTime= models.DateTimeField(auto_now_add=True) 
-#     updated_on = models.DateTimeField(auto_now= True) 
-
-
-
-class Likes(models.Model):
-    like=models.BooleanField()
-    userId=models.ForeignKey(User,on_delete= models.CASCADE)
-    post_id=models.ForeignKey(Post,on_delete= models.CASCADE)
+# class Likes(models.Model):
+#     like=models.BooleanField()
+#     userId=models.ForeignKey(User,on_delete= models.CASCADE)
+#     post_id=models.ForeignKey(Post,on_delete= models.CASCADE)
 
 
 class Word(models.Model):

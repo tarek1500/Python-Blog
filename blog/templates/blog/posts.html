@@ -39,14 +39,20 @@
     <div class="container media">
        <a href="showpost/{{post.id}}"> <img src="{{post.post_image.url}}"  class="mr-3" height="200px" width="300px"> </a>
         <div class="media-body">
-            <h3>{{post.title}}</h3>
+            <h3><strong>{{post.title}}</strong></h3>
+            <h5><b> Category :  </b><span>{{post.category_name}}</span></h5>
             <blockquote>{{post.snippet}}</blockquote>
             {% for tag in post.tags.all %}
-            <p>{{tag}}</p>
+            <p><strong>{{tag}}</strong></p>
             {% endfor %}
-            <div>
-            <span>{{post.created_on}}</span>
-            </div>
+            <div> <small><b>Published by :</b>
+              <span>{{post.author}}</span></small>
+             </div>
+             <div><small>
+             <span>{{post.created_on}}</span>
+             </small>
+             </div>
+             
         </div>
     </div>
     {% endfor %}

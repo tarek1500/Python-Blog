@@ -41,14 +41,14 @@
      <section>
       <div class="container-fluid ml-5 mt-5 mb-5">
         <div class="row text-left">
-          <div class="content-section">
+          <div class="content-section ">
             <h3>Categories</h3>
             <p class='text-muted'>
               <ul class="list-group">
                 {% for cat in category %}
                 <li class="list-group-item list-group-item-light">
                   <a href='view/{{cat.id}}'>{{cat.categoryName}}</a>
-                  <button class="btn btn-danger text-white ml-sm-5 ">Subscribe</button>
+                  <button class="btn btn-danger text-white ml-5">Subscribe</button>
                 </li>
                 {% endfor %}
               </ul>
@@ -57,15 +57,20 @@
           {% for post in post %}
           <div class="container media">
              <a href="showpost/{{post.id}}"> <img src="{{post.post_image.url}}"  class="mr-3" height="200px" width="300px"> </a>
-              <div class="media-body">
-                  <h3>{{post.title}}</h3>
+              <div class="media-body mt-3 mb-4">
+                  <h3><strong>{{post.title}}</strong></h3>
+                  <h5><b> Category :  </b><span>{{post.category_name}}</span></h5>
                   <blockquote>{{post.snippet}}</blockquote>
                   {% for tag in post.tags.all %}
-                  <p>{{tag}}</p>
+                  <p><strong>{{tag}}</strong></p>
                   {% endfor %}
-                  <div>
-                  <span>{{post.created_on}}</span>
-                  </div>
+                  <div> <small><b>Published by :</b>
+                    <span>{{post.author}}</span></small>
+                   </div>
+                   <div><small>
+                   <span>{{post.created_on}}</span>
+                   </small>
+                   </div>
               </div>
           </div>
           {% endfor %}
