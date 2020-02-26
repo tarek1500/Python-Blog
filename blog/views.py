@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse , HttpResponseRedirect
 from blog.models import Category ,Post , Comments 
 from .forms import *
@@ -35,7 +35,7 @@ def subscribe(request, cat_id):
 def searchPost(request):
     queryset= request.GET.get("query")
     if queryset:
-        queryset_list=Post.objects.filter(Q(title__icontains=queryset)| Q(tags__tag__icontains=queryset))
+        queryset_list=Post.objects.filter(Q(title__icontains=queryset)| Q(tags__tag__icontains=queryset)).distinct()
         context = {'posts':queryset_list}
         return render(request,'blog/posts.html',context)
 
@@ -44,25 +44,38 @@ def searchPost(request):
 
 def showpost(request,num):
     post = Post.objects.get(id=num)
-    comments=Comments.objects.filter(post_id=post.id).order_by('-id')
-    if request.method=='POST':
+    # is_liked=False
+    # if post.likes.filter(id=request.user.id).exists():
+    #     post.likes.remove(request.user)
+    #     is_liked=False
+    # else:
+    #     # post.likes.add(request.user)
+    #     is_liked=True
+    comments=Comments.objects.filter(post_id=post.id , reply=None).order_by('-id')
+    if request.method =='POST':
         comment_form=CommentForm(request.POST or None)
         if comment_form.is_valid():
-            instance=comment_form.save(commit=False)
-            # if request.method=='POST':
-            #     reply=CommentForm(request.POST or None)
-            #     if reply.is_valid:
-            #         reply= reply.save(commit=False)
-            #         reply.post_id= post
-            #         reply.user_id=request.user
-            #         reply.reply= Comments.objects.get(id=instance.id)
-            #         reply.save()
-            #         return HttpResponseRedirect('/blog/view/showpost/' + num)
-            instance.user_id=request.user
-            instance.post_id=post
-            instance.save()
-            return HttpResponseRedirect('/blog/view/showpost/' + num)
+            content=request.POST.get('content')
+            reply_id=request.POST.get('comment_id')
+            comment_qs=None
+            if reply_id:
+                comment_qs=Comments.objects.get(id=reply_id)
+            comment=Comments.objects.create(post_id=post,user_id=request.user , content=content , reply=comment_qs)
+            comment.save()
+            comment_form = CommentForm()
+        
+
+            # return HttpResponseRedirect('/blog/view/showpost/' + num)
     else : 
-        comment_form=CommentForm()
+        comment_form=CommentForm()  
     context ={'post':post, 'comments':comments , 'comment_form':comment_form}
     return render(request,'blog/onePost.html',context)
+
+# def Like(request,num):
+#     post=Post.objects.get(id=num)
+#     post.likes.add(request.user)
+#     return HttpResponseRedirect('blog/onePost.html')
+
+
+# def showPostsByTags(request,num):
+#     post
