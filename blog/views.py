@@ -1,90 +1,112 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
+from django.http import HttpResponse , HttpResponseRedirect
+from blog.models import Category ,Post , Comments , Likes, Tags
+from .forms import *
+from django.db.models import Q
 
-# Create your views here.
-from django.contrib.sites import requests
-from django.shortcuts import render , render_to_response, redirect,  
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib import auth
-from forms import CommentForm
-from models import post , comment ,category
-from django.contrib.auth.models import User
-# Create your views here.
+def landpage(request):
+    category = Category.objects.all()
 
+    if request.user.is_authenticated:
+        subscribed = category.filter(subscribe = request.user)
+        post = Post.objects.filter(category_name__in = subscribed).order_by('-created_on')[:5]
 
-def homePosts (request):
-    posts = post.objects.all().order_by('-post_date')
-    categories = category.objects.all()
+        context = {'category': category, 'post': post, 'sub': subscribed}
+    else:
+        post = Post.objects.all().order_by('-created_on')[:5]
+        context = {'category': category, 'post': post}
 
-    paginator = Paginator(posts , 1 )
-    page = request.GET.get('page')
-    try:
-        posts_data = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        posts_data = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        posts_data = paginator.page(paginator.num_pages)
-    current_user = request.user
-    subscribed_cats = category.objects.filter(user = current_user.id)
-    context = {'posts': posts_data , 'categories': categories, "subscribedCats": subscribed_cats }
-    return render(request , 'main/home.html' , context)
+    return render(request, 'blog/landpage.html', context)
 
 
+def subscribe(request, num):
+    category = Category.objects.get(id = num)
 
-def subscribe(request, cat_id):
-    current_user = request.user
-    subscribed_cats = category.objects.get(id = cat_id)
-    subscribed_cats.user.add(current_user)
-    #confirmSubscription(current_user.email,subscribed_cats.cat_title)
-    return HttpResponseRedirect('/home')
+    if request.POST.get('subscribe') == '0':
+        category.subscribe.remove(request.user)
+    else:
+        category.subscribe.add(request.user)
 
-def unsubscribe(request, cat_id):
-    current_user = request.user
-    subscribed_cats = category.objects.get(id = cat_id)
-    subscribed_cats.user.remove(current_user)
-    return HttpResponseRedirect('/home')
+    return HttpResponseRedirect('/blog/landpage')
 
+def categoryPosts(request, cat):
+    posts = Post.objects.filter(category_name = cat).order_by('-created_on')
+    context = {'posts': posts}
 
-def PostDetails(request, id):
-    #return HttpResponse('details of %s' %id)
-    postDetails =  get_object_or_404(post, id = id)
-    categoryDetails = postDetails.post_cat_id
-    #comments = comment.objects.filter(comment_post_id = postDetails.id)
-    form = CommentForm(request.POST or None)
+    return render(request, 'blog/posts.html', context)
 
-    context = {'postDetails': postDetails, 'postCat': categoryDetails, 'form': form}
-    return render(request, 'post/postDetails.html', context )
+def searchPost(request):
+    queryset= request.GET.get("query")
+    if queryset:
+        queryset_list=Post.objects.filter(Q(title__icontains=queryset)| Q(tags__tag__icontains=queryset))
+        context = {'posts':queryset_list}
+        return render(request,'blog/posts.html',context)
 
-def addComment(request, postID):
-    print postID, request.user
-    if request.method == 'POST':
-	    comment = CommentForm(request.POST, request.FILES)
-	    if comment.is_valid():
-		    comment = comment.save(commit=False)
-            comment.comment_body = censor(comment.comment_body)
-            comment.post = post.objects.get(id = postID)
-            #comment.User = User.objects.get(id = request.user.id)
-            comment.comment_user_id_id = request.user.id
-            comment.comment_post_id_id = postID
+    else:
+        return HttpResponse ("<h1> There is nothing </h1>")
 
+def showPostsByTags(request, id):
+    tag = Tags.objects.get(id = id)
+    posts = Post.objects.filter(tags = tag).order_by('-created_on')
+    context = {'posts': posts}
+
+    return render(request, 'blog/posts.html', context)
+
+def showpost(request, num):
+    is_liked=None
+    post = Post.objects.get(id=num)
+    like = Likes.objects.filter(post_id=post)
+
+    post_likes = like.filter(like = True).count()
+    post_dislikes = like.filter(like = False).count()
+
+    if request.user.is_authenticated:
+        like = Likes.objects.filter(post_id=post, userId=request.user)
+
+        if like.exists():
+            if like.get().like == True:
+                is_liked=True
+            else:
+                is_liked=False
+
+    comments=Comments.objects.filter(post_id=post.id , reply=None).order_by('-id')
+    if request.method =='POST':
+        comment_form=CommentForm(request.POST or None)
+        if comment_form.is_valid():
+            content=request.POST.get('content')
+            reply_id=request.POST.get('comment_id')
+            comment_qs=None
+            if reply_id:
+                comment_qs=Comments.objects.get(id=reply_id)
+            comment=Comments.objects.create(post_id=post,user_id=request.user , content=content , reply=comment_qs)
             comment.save()
-            return redirect(request.path)
-    return HttpResponseRedirect("/main/"+postID+"/post")
+            comment_form = CommentForm()
+        
 
-def addReply(request, postID, commentID):
-    if request.method == 'POST':
-	    reply = CommentForm(request.POST, request.FILES)
-	    if reply.is_valid():
-		    reply = reply.save(commit=False)
-            #reply.comment_body = censor(reply.comment_body)
-            reply.post = post.objects.get(id = postID)
-            #comment.User = User.objects.get(id = request.user.id)
-            reply.comment_user_id_id = request.user.id
-            reply.comment_post_id_id = postID
-            reply.reply_comment_id = comment.objects.get(id = commentID)
+            # return HttpResponseRedirect('/blog/view/showpost/' + num)
+    else : 
+        comment_form=CommentForm()  
+    context ={'post':post, 'is_liked': is_liked, 'post_likes': post_likes, 'post_dislikes': post_dislikes, 'comments':comments , 'comment_form':comment_form}
+    return render(request,'blog/onePost.html',context)
 
-            reply.save()
-            return redirect(request.path)
-    return HttpResponseRedirect("/main/"+postID+"/post")
+def like(request,num):
+    if not Likes.objects.filter(post_id=num, userId=request.user.id).exists():
+        post = Post.objects.get(id=num)
+
+        if request.POST.get('like') == '1':
+            Likes.objects.create(post_id=post, userId=request.user, like = True)
+        else:
+            Likes.objects.create(post_id=post, userId=request.user, like = False)
+
+        like = Likes.objects.filter(post_id=post, like = 0)
+
+        if like.count() >= 10:
+            like.delete()
+            post.delete()
+
+            return HttpResponseRedirect('/blog/landpage/')
+
+    return HttpResponseRedirect('/blog/showpost/' + num)
+
+
+

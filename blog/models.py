@@ -7,41 +7,62 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 #Categories table
-class category(models.Model):
-    cat_title = models.CharField(max_length= 200)
-    user = models.ManyToManyField(User, blank=True)
-
-    def __str__ (self):
-        return self.cat_title
-
-
-#Posts table
-class post(models.Model):
-
-    post_title = models.CharField(max_length = 200)
-    post_content = models.TextField()
-    post_img=models.ImageField(upload_to="", blank=True)
-    post_date=models.DateField(auto_now_add = True)
-    post_cat_id=models.ForeignKey(category)
-
+class Category(models.Model):
+    categoryName = models.CharField(max_length=200)
+    subscribe = models.ManyToManyField(User)
     def __str__(self):
-        return self.post_title
+        return self.categoryName
+
+class Tags(models.Model):
+    tag =models.CharField(max_length=200, unique=True)
+    def __str__(self):
+        return self.tag
+
+class Post(models.Model):
+    title = models.CharField(max_length=200, unique=True)
+    body = models.TextField()
+    post_image = models.ImageField(upload_to='images/',null=True,blank=True)
+    created_on = models.DateTimeField(auto_now_add=True) 
+    tags = models.ManyToManyField(Tags)
+    author = models.ForeignKey(User, on_delete= models.CASCADE)
+#    likes=models.ManyToManyField(User,related_name='likes',blank=True)
+    category_name = models.ForeignKey(Category,on_delete= models.CASCADE) 
+    updated_on = models.DateTimeField(auto_now= True)       
+    #  slug = models.SlugField(max_length=200, unique=True)
+    def __str__(self):
+        return self.title
+    
+    def snippet(self):
+        return self.body[:200]+"....."
 
 #Comments table
-class comment(models.Model):
-    comment_body = models.TextField()
-    comment_date=models.DateField(auto_now_add = True)
-    comment_user_id=models.ForeignKey(User)
-    reply_comment_id = models.ForeignKey('self', null=True, blank=True)
-    comment_post_id = models.ForeignKey(post)
+class Comments(models.Model):
+    user_id=models.ForeignKey(User,on_delete= models.CASCADE)
+    post_id=models.ForeignKey(Post,on_delete= models.CASCADE)
+    content=models.TextField()
+    reply=models.ForeignKey('Comments',null=True,related_name='replies',on_delete= models.CASCADE)
+    commentTime= models.DateTimeField(auto_now_add=True) 
+    updated_on = models.DateTimeField(auto_now= True) 
+
+    def removeWords(self):
+        words = Word.objects.all()
+
+        for word in words:
+            self.content = self.content.replace(word.name, '*' * len(word.name))
+
+        return self.content
 
     def __str__(self):
         return self.comment_body
 
-# Words list table
-class word_list(models.Model):
-    word_list = models.CharField(max_length=50)
+class Likes(models.Model):
+    like=models.BooleanField()
+    userId=models.ForeignKey(User,on_delete= models.CASCADE)
+    post_id=models.ForeignKey(Post,on_delete= models.CASCADE)
 
-    def __str__(self):
-        return self.word_list
+# Words list table
+class Word(models.Model):
+    name = models.CharField(max_length = 100)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
 
