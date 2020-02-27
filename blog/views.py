@@ -16,7 +16,7 @@ def landpage(request):
         post = Post.objects.all().order_by('-created_on')[:5]
         context = {'category': category, 'post': post}
 
-    return render(request, 'blog/landpage.html', context)
+    return render(request, 'index.html', context)
 
 
 def subscribe(request, num):
@@ -87,7 +87,7 @@ def showpost(request, num):
     else : 
         comment_form=CommentForm()  
     context ={'post':post, 'is_liked': is_liked, 'post_likes': post_likes, 'post_dislikes': post_dislikes, 'comments':comments , 'comment_form':comment_form}
-    return render(request,'blog/onePost.html',context)
+    return render(request,'onePost.html',context)
 
 def like(request,num):
     if not Likes.objects.filter(post_id=num, userId=request.user.id).exists():
@@ -107,6 +107,3 @@ def like(request,num):
             return HttpResponseRedirect('/blog/landpage/')
 
     return HttpResponseRedirect('/blog/showpost/' + num)
-
-
-
