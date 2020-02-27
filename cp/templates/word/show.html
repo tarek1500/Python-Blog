@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block container %}
+	<h1 class="h3 mb-4 text-gray-800"><a href="{% url 'cp:word-index' %}">Go back</a></h1>
+
+	<form>
+		<div class="row">
+			<label for="id" class="col-sm-2 col-form-label">ID</label>
+			<div class="col-sm-10">
+				<input type="text" id="id" class="form-control-plaintext" value="{{ word.id }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="name" class="col-sm-2 col-form-label">Word</label>
+			<div class="col-sm-10">
+				<input type="text" id="name" class="form-control-plaintext" value="{{ word.name }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="created-at" class="col-sm-2 col-form-label">Created at</label>
+			<div class="col-sm-10">
+				<input type="text" id="created-at" class="form-control-plaintext" value="{{ word.created_at }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="updated-at" class="col-sm-2 col-form-label">Updated at</label>
+			<div class="col-sm-10">
+				<input type="text" id="updated-at" class="form-control-plaintext" value="{{ word.updated_at }}" readonly>
+			</div>
+		</div>
+	</form>
+{% endblock %}
+
+{% block script %}
+	<script src="{% static 'js/cp/word/script.js' %}"></script>
+{% endblock %}
