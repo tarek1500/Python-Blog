@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -37,23 +39,35 @@ class Post(models.Model):
 
 	def __str__(self):
 		return self.title
+  
+  def snippet(self):
+    return self.body[:200] + "..."
 
 class Comment(models.Model):
 	content = models.TextField()
 	post = models.ForeignKey(Post, on_delete = models.CASCADE)
 	user = models.ForeignKey(User, on_delete = models.CASCADE)
+  reply = models.ForeignKey('Comments', null = True, related_name = 'replies', on_delete = models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add = True)
 	updated_at = models.DateTimeField(auto_now=True)
 	
 	def __str__(self):
 		return self.content
+  
+  def removeWords(self):
+    words = Word.objects.all()
 
-class Reply(models.Model):
-	content = models.TextField()
-	comment = models.ForeignKey(Comment, on_delete = models.CASCADE)
-	user = models.ForeignKey(User, on_delete = models.CASCADE)
-	created_at = models.DateTimeField(auto_now_add = True)
-	updated_at = models.DateTimeField(auto_now = True)
+    for word in words:
+        self.content = self.content.replace(word.name, '*' * len(word.name))
+
+    return self.content
+
+# class Reply(models.Model):
+# 	content = models.TextField()
+# 	comment = models.ForeignKey(Comment, on_delete = models.CASCADE)
+# 	user = models.ForeignKey(User, on_delete = models.CASCADE)
+# 	created_at = models.DateTimeField(auto_now_add = True)
+# 	updated_at = models.DateTimeField(auto_now = True)
 
 class Word(models.Model):
 	name = models.CharField(max_length = 100)

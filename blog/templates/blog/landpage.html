@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+</head>
+
+<body>
+    <section> 
+      <div>
+        <nav class="navbar navbar-light  navbar-expand-lg fixed-top " >
+          <div class="container-fluid">
+             <form class="form-inline my-2 my-lg-0" method="GET" action="search">
+              <input class="form-control mr-sm-2  text-left  border-top-0 border-right-0 border-left-0 border-bottom border border-light btn btn-transparent" type="search" placeholder="Search..." name="query" aria-label="Search">
+              <button class="btn btn-outline-info my-2 my-sm-0"  type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav mr-5 ml-auto ">
+              <li class="nav-item ">
+              <button class="btn btn-outline-info mr-sm-4 "><a class="nav-link " href="#">Sign up</a></button>
+              </li>
+             <li class="nav-item ">
+              <button class="btn btn-outline-info mr-sm-4 "> <a class="nav-link" href="#">Login</a></button>
+            </li>
+            </ul>
+          </div>
+          </nav>
+         
+           <div class="text-center">    
+            <img src="{%static 'images\hero_2.jpg' %}" class="d-block w-100 " alt="..." style=" height: 500px;">
+          </div>   
+         </div>
+     </section> 
+     <section>
+      <div class="container-fluid ml-5 mt-5 mb-5">
+        <div class="row text-left">
+          <div class="content-section">
+            <h3>Categories</h3>
+            <p class='text-muted'>
+              <ul class="list-group">
+                {% for cat in category %}
+                <li class="list-group-item list-group-item-light">
+                  <a href='view/{{cat.id}}'>{{cat.categoryName}}</a>
+                  <form method="POST" action="/blog/subscribe/{{cat.id}}">
+                    {% csrf_token %}
+                    {% if cat in sub %}
+                      <input type="hidden" name="subscribe" value="0">
+                      <button class="btn btn-danger text-white ml-sm-5">Unsubscribe</button>
+                    {% else %}
+                      <input type="hidden" name="subscribe" value="1">
+                      <button class="btn btn-primary text-white ml-sm-5">Subscribe</button>
+                    {% endif %}
+                  </form>
+                </li>
+                {% endfor %}
+              </ul>
+            </p>
+          </div>
+          {% for post in post %}
+          <div class="container media">
+             <a href="showpost/{{post.id}}"> <img src="{{post.post_image.url}}"  class="mr-3" height="200px" width="300px"> </a>
+              <div class="media-body">
+                  <h3>{{post.title}}</h3>
+                  <blockquote>{{post.snippet}}</blockquote>
+                  {% for tag in post.tags.all %}
+                  <p><a href="/blog/withtag/{{ tag.id }}">{{ tag }}</a></p>
+                  {% endfor %}
+                  <div>
+                  <span>{{post.created_on}}</span>
+                  </div>
+              </div>
+          </div>
+          {% endfor %}
+      
+        </div>
+      </div>
+     </section>
+
+</body>
+</html>
