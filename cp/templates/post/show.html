@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block container %}
+	<h1 class="h3 mb-4 text-gray-800"><a href="{% url 'cp:post-index' %}">Go back</a></h1>
+
+	<form>
+		<div class="row">
+			<div class="col text-center">
+				<img class="img-fluid" src="{{ post.image.url }}">
+			</div>
+		</div>
+		<div class="row">
+			<label for="id" class="col-sm-2 col-form-label">ID</label>
+			<div class="col-sm-10">
+				<input type="text" id="id" class="form-control-plaintext" value="{{ post.id }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="title" class="col-sm-2 col-form-label">Title</label>
+			<div class="col-sm-10">
+				<input type="text" id="title" class="form-control-plaintext" value="{{ post.title }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="body" class="col-sm-2 col-form-label">Body</label>
+			<div class="col-sm-10">
+				<input type="text" id="body" class="form-control-plaintext" value="{{ post.body }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="category" class="col-sm-2 col-form-label">Category</label>
+			<div class="col-sm-10">
+				<input type="text" id="category" class="form-control-plaintext" value="{{ post.category }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="author" class="col-sm-2 col-form-label">Author</label>
+			<div class="col-sm-10">
+				<input type="text" id="author" class="form-control-plaintext" value="{{ post.author }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="tag" class="col-sm-2 col-form-label">Tags</label>
+			<div class="col-sm-10">
+				{% for tag in post.tag.all %}
+					<input type="text" id="tag" class="form-control-plaintext" value="{{ tag }}" readonly>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="row">
+			<label for="created-at" class="col-sm-2 col-form-label">Created at</label>
+			<div class="col-sm-10">
+				<input type="text" id="created-at" class="form-control-plaintext" value="{{ post.created_at }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="updated-at" class="col-sm-2 col-form-label">Updated at</label>
+			<div class="col-sm-10">
+				<input type="text" id="updated-at" class="form-control-plaintext" value="{{ post.updated_at }}" readonly>
+			</div>
+		</div>
+	</form>
+{% endblock %}
+
+{% block script %}
+	<script src="{% static 'js/cp/post/script.js' %}"></script>
+{% endblock %}
