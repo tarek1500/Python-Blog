@@ -39,35 +39,28 @@ class Post(models.Model):
 
 	def __str__(self):
 		return self.title
-  
-  def snippet(self):
-    return self.body[:200] + "..."
+
+	def snippet(self):
+		return self.body[:200] + "..."
 
 class Comment(models.Model):
 	content = models.TextField()
 	post = models.ForeignKey(Post, on_delete = models.CASCADE)
 	user = models.ForeignKey(User, on_delete = models.CASCADE)
-  reply = models.ForeignKey('Comments', null = True, related_name = 'replies', on_delete = models.CASCADE)
+	reply = models.ForeignKey('Comment', null = True, related_name = 'replies', on_delete = models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add = True)
 	updated_at = models.DateTimeField(auto_now=True)
-	
+
 	def __str__(self):
 		return self.content
-  
-  def removeWords(self):
-    words = Word.objects.all()
 
-    for word in words:
-        self.content = self.content.replace(word.name, '*' * len(word.name))
+	def removeWords(self):
+		words = Word.objects.all()
 
-    return self.content
+		for word in words:
+			self.content = self.content.replace(word.name, '*' * len(word.name))
 
-# class Reply(models.Model):
-# 	content = models.TextField()
-# 	comment = models.ForeignKey(Comment, on_delete = models.CASCADE)
-# 	user = models.ForeignKey(User, on_delete = models.CASCADE)
-# 	created_at = models.DateTimeField(auto_now_add = True)
-# 	updated_at = models.DateTimeField(auto_now = True)
+		return self.content
 
 class Word(models.Model):
 	name = models.CharField(max_length = 100)

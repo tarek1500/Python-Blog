@@ -47,7 +47,7 @@
             <!-- todo: make tags href -->
             <div>
              <span>{{post.author}}</span>
-            <span>{{post.created_on}}</span>
+            <span>{{post.created_at}}</span>
             </div>
             <span>Likes: {{ post_likes }}</span><br>
             <span>Dislikes: {{ post_dislikes }}</span>
@@ -83,7 +83,7 @@
            </blockquote>
             
            <div class="container mt-2">
-{% for reply in comment.replies.all %}
+{% for reply in comment.reply.all %}
                <blockquote class="blockquote">
                 <p><small> {{reply.removeWords}}</small></p>
                 <footer class="blockquote-footer"><small> by  <cite title="Source Title">{{reply.user_id |capfirst}}</cite></small>

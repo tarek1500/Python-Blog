@@ -1,11 +1,11 @@
 from django.contrib import admin
-from blog.models import Category, Tags,Post,Comments,Word
+from blog.models import Category, Tag,Post,Comment,Word
 
 admin.site.register(Category)
-admin.site.register(Tags)
+admin.site.register(Tag)
 admin.site.register(Post)
-admin.site.register(Comments)
+admin.site.register(Comment)
 # admin.site.register(Reply)
-# admin.site.register(Likes)
-admin.site.register(Word)
+#admin.site.register(Likes)
+#admin.site.register(Word)
 # Register your models here.

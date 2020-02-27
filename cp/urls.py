@@ -36,12 +36,6 @@ urlpatterns = [
 	path('comment/edit/<id>', views.commentEdit, name = 'comment-edit'),
 	path('comment/delete/<id>', views.commentDelete, name = 'comment-delete'),
 
-	path('reply', views.replyIndex, name = 'reply-index'),
-	path('reply/create', views.replyCreate, name = 'reply-create'),
-	path('reply/show/<id>', views.replyShow, name = 'reply-show'),
-	path('reply/edit/<id>', views.replyEdit, name = 'reply-edit'),
-	path('reply/delete/<id>', views.replyDelete, name = 'reply-delete'),
-
 	path('word', views.wordIndex, name = 'word-index'),
 	path('word/create', views.wordCreate, name = 'word-create'),
 	path('word/show/<id>', views.wordShow, name = 'word-show'),
