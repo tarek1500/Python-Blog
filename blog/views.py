@@ -11,7 +11,7 @@ def landpage(request):
     current_user=request.user
     subscribed=Category.objects.filter( subscribe=current_user.id )
     context ={'category':category , 'post':post , 'sub':subscribed}
-    return render(request, 'blog/landpage.html', context)
+    return render(request, 'index.html', context)
 
 
 def categoryPosts(request,cat):
@@ -23,14 +23,14 @@ def unsubscribe(request, cat_id):
     current_user = request.user
     subscribed_cats = Category.objects.get(id = cat_id)
     subscribed_cats.user.remove(current_user)
-    return HttpResponseRedirect('blog/landpage')
+    return HttpResponseRedirect('landpage')
 
 def subscribe(request, cat_id):
     current_user = request.user
     subscribed_cats = Category.objects.get(id = cat_id)
     subscribed_cats.user.add(current_user)
     #confirmSubscription(current_user.email,subscribed_cats.cat_title)
-    return HttpResponseRedirect('blog/landpage')
+    return HttpResponseRedirect('landpage')
 
 def searchPost(request):
     queryset= request.GET.get("query")
@@ -65,11 +65,11 @@ def showpost(request,num):
             comment_form = CommentForm()
         
 
-            # return HttpResponseRedirect('/blog/view/showpost/' + num)
+            #return HttpResponseRedirect('/blog/view/showpost/' + num)
     else : 
         comment_form=CommentForm()  
     context ={'post':post, 'comments':comments , 'comment_form':comment_form}
-    return render(request,'blog/onePost.html',context)
+    return render(request,'onePost.html',context)
 
 # def Like(request,num):
 #     post=Post.objects.get(id=num)

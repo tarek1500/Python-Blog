@@ -10,31 +10,39 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+
 
 </head>
 
 <body>
-    <section> 
-        <div>
-          <nav class="navbar navbar-light  navbar-expand-lg fixed-top " >
-            <div class="container-fluid">
-              <form class="form-inline my-2 my-lg-0" method="GET" action="search">
-                <input class="form-control mr-sm-2  text-left  border-top-0 border-right-0 border-left-0 border-bottom border border-light btn btn-transparent" type="search" name="query" placeholder="Search..." name="query" aria-label="Search">
-                <button class="btn btn-outline-info my-2 my-sm-0"  type="submit">Search</button>
-              </form>
-              <ul class="navbar-nav mr-5 ml-auto ">
-                <li class="nav-item ">
-                <button class="btn btn-outline-info mr-sm-4 "><a class="nav-link " href="#">Sign up</a></button>
-                </li>
-               <li class="nav-item ">
-                <button class="btn btn-outline-info mr-sm-4 "> <a class="nav-link" href="#">Login</a></button>
-              </li>
-              </ul>
-            </div>
-            </nav>
+  <header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <div class="container">
+        <a class="navbar-brand mr-4" >Django Blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggle">
+          <div class="navbar-nav mr-auto">
+            <a class="nav-item nav-link" >Home</a>
+            <a class="nav-item nav-link" >About</a>
+          </div>
+          
+          <!-- Navbar Right Side -->
+          <div class="navbar-nav">
+            {% if user.is_authenticated %}
+              <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+              <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+              <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+              <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+            {% endif %}
+          </div>
         </div>
-        </section>
+      </div>
+    </nav>
+  </header>
 <section class="mt-5">
     
     <div class="container media">
@@ -116,5 +124,10 @@
           
              </div>
 </section>
+ <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
