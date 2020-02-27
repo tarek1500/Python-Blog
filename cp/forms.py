@@ -28,11 +28,6 @@ class CommentForm(forms.ModelForm):
 		model = Comment
 		fields = ['content', 'user', 'post']
 
-class ReplyForm(forms.ModelForm):
-	class Meta:
-		model = Reply
-		fields = ['content', 'comment', 'user']
-
 class WordForm(forms.ModelForm):
 	class Meta:
 		model = Word

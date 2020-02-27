@@ -15,11 +15,6 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'register.html', {'form': form})
 
-
 @login_required
 def profile(request):
     return render(request, 'profile.html')
-    # if !request.user.is_active:
-    #     logout
-    #     rediret login
-    #     message => 
