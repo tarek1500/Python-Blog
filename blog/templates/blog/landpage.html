@@ -70,7 +70,7 @@
                   <h3>{{post.title}}</h3>
                   <blockquote>{{post.snippet}}</blockquote>
                   {% for tag in post.tags.all %}
-                  <p><a href="withtag/{{ tag.id }}">{{ tag }}</a></p>
+                  <p><a href="/showpost/withtag/{{ tag.id }}">{{ tag }}</a></p>
                   {% endfor %}
                   <div>
                   <span>{{post.created_at}}</span>

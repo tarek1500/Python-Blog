@@ -50,7 +50,7 @@
           <h5><b> Category :  </b><span>{{post.category}}</span></h5>
           <blockquote>{{post.snippet}}</blockquote>
           {% for tag in post.tag.all %}
-          <p><strong>{{tag}}</strong></p>
+          <p><strong><a href="/showpost/withtag/{{ tag.id }}">{{ tag }}</a></strong></p>
           {% endfor %}
           <div> <small><b>Published by :</b>
             <span>{{post.author}}</span></small>

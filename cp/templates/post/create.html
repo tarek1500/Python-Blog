@@ -5,7 +5,7 @@
 {% block container %}
 	<h1 class="h3 mb-4 text-gray-800"><a href="{% url 'cp:post-index' %}">Go back</a></h1>
 
-	<form method="POST" class="user">
+	<form method="POST" class="user" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form|crispy }}
 		<div class="text-center">

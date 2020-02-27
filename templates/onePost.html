@@ -51,7 +51,7 @@
         <h3>{{post.title}}</h3>
         <blockquote>{{post.body}}</blockquote>
         {% for tag in post.tag.all %}
-        <p><a href="/withtag/{{ tag.id }}">{{ tag }}</a></p>
+        <p><a href="/showpost/withtag/{{ tag.id }}">{{ tag }}</a></p>
         {% endfor %} 
         <!-- todo: make tags href -->
         <div>
@@ -59,7 +59,8 @@
         <span>{{post.created_at}}</span>
         </div>
         <span>Likes: {{ post_likes }}</span><br>
-        <span>Dislikes: {{ post_dislikes }}</span>
+		<span>Dislikes: {{ post_dislikes }}</span>
+		{% if request.user.is_authenticated %}
         <form method="post" action="like/{{post.id}}">
             {% csrf_token %}  
             {% if is_liked == None %}
@@ -73,7 +74,8 @@
               <input type="hidden" name="like" value="1">
               <button type="submit" class= "btn btn-outline-primary ">Like</button>
             {% endif %}
-        </form>
+		</form>
+		{% endif %}
     </div>
     
 </div>  
