@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block container %}
+	<h1 class="h3 mb-4 text-gray-800"><a href="{% url 'cp:comment-create' %}">Create Comment</a></h1>
+
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Comments</h6>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Post</th>
+							<th>User</th>
+							<th>Created at</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>ID</th>
+							<th>Post</th>
+							<th>User</th>
+							<th>Created at</th>
+							<th>Actions</th>
+						</tr>
+					</tfoot>
+					<tbody>
+						{% for comment in comments %}
+							<tr>
+								<td>{{ comment.id }}</td>
+								<td>{{ comment.post }}</td>
+								<td>{{ comment.user }}</td>
+								<td>{{ comment.created_at }}</td>
+								<td>
+									<div class="btn-group">
+										<a class="btn btn-primary" href="{% url 'cp:comment-show' id=comment.id %}">Show</a>
+										<a class="btn btn-success" href="{% url 'cp:comment-edit' id=comment.id %}">Edit</a>
+										<a class="btn btn-danger" href="{% url 'cp:comment-delete' id=comment.id %}">Delete</a>
+									</div>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script src="{% static 'js/cp/comment/script.js' %}"></script>
+{% endblock %}

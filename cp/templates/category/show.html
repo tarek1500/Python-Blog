@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block container %}
+	<h1 class="h3 mb-4 text-gray-800"><a href="{% url 'cp:category-index' %}">Go back</a></h1>
+
+	<form>
+		<div class="row">
+			<label for="id" class="col-sm-2 col-form-label">ID</label>
+			<div class="col-sm-10">
+				<input type="text" id="id" class="form-control-plaintext" value="{{ category.id }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="name" class="col-sm-2 col-form-label">Name</label>
+			<div class="col-sm-10">
+				<input type="text" id="name" class="form-control-plaintext" value="{{ category.name }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="subscriber" class="col-sm-2 col-form-label">Subscribers</label>
+			<div class="col-sm-10">
+				{% for subscriber in category.subscribe.all %}
+					<input type="text" id="subscriber" class="form-control-plaintext" value="{{ subscriber }}" readonly>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="row">
+			<label for="created-at" class="col-sm-2 col-form-label">Created at</label>
+			<div class="col-sm-10">
+				<input type="text" id="created-at" class="form-control-plaintext" value="{{ category.created_at }}" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<label for="updated-at" class="col-sm-2 col-form-label">Updated at</label>
+			<div class="col-sm-10">
+				<input type="text" id="updated-at" class="form-control-plaintext" value="{{ category.updated_at }}" readonly>
+			</div>
+		</div>
+	</form>
+{% endblock %}
+
+{% block script %}
+	<script src="{% static 'js/cp/category/script.js' %}"></script>
+{% endblock %}

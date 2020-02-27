@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block container %}
+	<h1 class="h3 mb-4 text-gray-800"><a href="{% url 'cp:user-create' %}">Create User</a></h1>
+
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Users</h6>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Username</th>
+							<th>Superuser</th>
+							<th>Staff</th>
+							<th>Active</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Username</th>
+							<th>Superuser</th>
+							<th>Staff</th>
+							<th>Active</th>
+							<th>Actions</th>
+						</tr>
+					</tfoot>
+					<tbody>
+						{% for user in users %}
+							<tr>
+								<td>{{ user.id }}</td>
+								<td>{{ user }}</td>
+								<td>{{ user.username }}</td>
+								<td>{{ user.is_superuser }}</td>
+								<td>{{ user.is_staff }}</td>
+								<td>{{ user.is_active }}</td>
+								<td>
+									<div class="btn-group">
+										<a class="btn btn-primary" href="{% url 'cp:user-show' id=user.id %}">Show</a>
+										<a class="btn btn-success" href="{% url 'cp:user-edit' id=user.id %}">Edit</a>
+										<a class="btn btn-danger" href="{% url 'cp:user-delete' id=user.id %}">Delete</a>
+									</div>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script src="{% static 'js/cp/user/script.js' %}"></script>
+{% endblock %}
