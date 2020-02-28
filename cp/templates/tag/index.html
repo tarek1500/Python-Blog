@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block container %}
+	<h1 class="h3 mb-4 text-gray-800"><a href="{% url 'cp:tag-create' %}">Create Tag</a></h1>
+
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Tags</h6>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Created at</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Created at</th>
+							<th>Actions</th>
+						</tr>
+					</tfoot>
+					<tbody>
+						{% for tag in tags %}
+							<tr>
+								<td>{{ tag.id }}</td>
+								<td>{{ tag.name }}</td>
+								<td>{{ tag.created_at }}</td>
+								<td>
+									<div class="btn-group">
+										<a class="btn btn-primary" href="{% url 'cp:tag-show' id=tag.id %}">Show</a>
+										<a class="btn btn-success" href="{% url 'cp:tag-edit' id=tag.id %}">Edit</a>
+										<a class="btn btn-danger" href="{% url 'cp:tag-delete' id=tag.id %}">Delete</a>
+									</div>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script src="{% static 'js/cp/tag/script.js' %}"></script>
+{% endblock %}
