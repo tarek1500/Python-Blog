@@ -40,7 +40,7 @@ def categoryPosts(request, cat):
 def searchPost(request):
     queryset= request.GET.get("query")
     if queryset:
-        queryset_list=Post.objects.filter(Q(title__icontains=queryset) | Q(tag__name__icontains=queryset))
+        queryset_list=Post.objects.filter(Q(title__icontains=queryset) | Q(tag__name__icontains=queryset)).distinct()
         context = {'posts':queryset_list}
         return render(request,'posts.html',context)
     else:

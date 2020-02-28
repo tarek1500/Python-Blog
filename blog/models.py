@@ -1,7 +1,6 @@
-from __future__ import unicode_literals
-
 from django.db import models
 from django.contrib.auth.models import User
+import re
 
 # Create your models here.
 
@@ -58,7 +57,7 @@ class Comment(models.Model):
 		words = Word.objects.all()
 
 		for word in words:
-			self.content = self.content.replace(word.name, '*' * len(word.name))
+			self.content = re.sub(r"(?i)\b{}\b".format(word.name), word.name, self.content)
 
 		return self.content
 

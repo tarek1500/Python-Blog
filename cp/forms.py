@@ -11,7 +11,7 @@ class CategoryForm(forms.ModelForm):
 class CustomUserCreationForm(forms.ModelForm):
 	class Meta:
 		model = User
-		fields = ['is_superuser', 'is_staff', 'is_active']
+		fields = ['first_name', 'last_name', 'is_superuser', 'is_staff', 'is_active']
 
 class TagForm(forms.ModelForm):
 	class Meta:
